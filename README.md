@@ -1,1 +1,1 @@
-# Funky - Functional Programming Playground
+## Funky - Functional Programming Playground
