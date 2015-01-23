@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static fp.List.*;
 import static fp.List.cons;
 import static fp.List.empty;
 import static fp.Pair.pair;
@@ -77,7 +78,7 @@ public class Lists {
             return ys;
         } else if (ys.isEmpty()) {
             return xs;
-        } else if (less(xs.head(), ys.head())) {
+        } else if (lt(xs.head(), ys.head())) {
             return cons(xs.head(), merge(xs.tail(), ys));
         } else {
             return cons(ys.head(), merge(xs, ys.tail()));
@@ -96,14 +97,13 @@ public class Lists {
         return foldr((y, ys) -> p.test(y) ? cons(y, ys) : ys, empty(), xs);
     }
 
-    // #todo make generic
-    public static List<Integer> qsort(List<Integer> xs) {
+    public static<T extends Comparable<T>> List<T> qsort(List<T> xs) {
         if (xs.isEmpty()) {
             return xs;
         }
-        List<Integer> less = filter(x -> x <= xs.head(), xs.tail());
-        List<Integer> more = filter(x -> x >  xs.head(), xs.tail());
-        return concat(append(xs.head(), qsort(less)), qsort(more));
+        List<T> less = filter(x ->  lt(x, xs.head()), xs.tail());
+        List<T> more = filter(x -> gte(x, xs.head()), xs.tail());
+        return flatten(list(qsort(less), list(xs.head()), qsort(more)));
     }
 
     public static<A,B> List<B> map(Function<A, B> f, List<A> xs) {
@@ -193,12 +193,16 @@ public class Lists {
         return foldr((x,y) -> x && y, true, map(p::test, xs));
     }
 
-    public static boolean isSorted(List<? extends Comparable> xs) {
-        return all(x -> less(x.right(), x.left()), pairs(xs));
+    public static boolean isSorted(List<? extends Comparable<?>> xs) {
+        return all(x -> lt(x.right(), x.left()), pairs(xs));
     }
 
-    public static boolean less(Comparable a, Comparable b) {
-        return a.compareTo(b) == -1;
+    public static boolean lt(Comparable a, Comparable b) {
+        return a.compareTo(b) < 0;
+    }
+
+    public static boolean gte(Comparable a, Comparable b) {
+        return a.compareTo(b) >= 0;
     }
 
     public static<T> Pair<List<T>, List<T>> partitionBy(Predicate<T> p, List<T> xs) {

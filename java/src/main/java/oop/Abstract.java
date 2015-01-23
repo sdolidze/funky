@@ -21,9 +21,5 @@ class Whatever {
                 return 5;
             }
         };
-
-        List<T> array = new ArrayList<>();
-        array.re
-
     }
 }

@@ -1,6 +1,7 @@
 package fp;
 
 import junit.framework.TestCase;
+import take2.Prelude;
 
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -143,9 +144,9 @@ public class ListsTest extends TestCase {
     }
 
     public void testLess() {
-        assertTrue(less(1, 2));
-        assertFalse(less(1, 1));
-        assertFalse(less(2, 1));
+        assertTrue(lt(1, 2));
+        assertFalse(lt(1, 1));
+        assertFalse(lt(2, 1));
     }
 
     public void testPartitionBy() {
@@ -161,5 +162,9 @@ public class ListsTest extends TestCase {
         assertEquals(4, (int) f.apply(1));
         assertEquals(1, (int) g.apply(1));
         assertEquals(5, (int) g.apply(5));
+    }
+
+    public void testBla() {
+        System.out.println(Prelude.extend(take2.List.list(1,2,3), take2.List.list(4,5,6)));
     }
 }
