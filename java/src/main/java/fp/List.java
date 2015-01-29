@@ -1,29 +1,39 @@
 package fp;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * I'm deliberately breaking encapsulation, not using final properties and using null as empty list.
+ * Doing so makes code smaller.
+ * @param <T>
+ */
 public class List<T> implements  Iterable<T> {
-    private static final List EMPTY = cons(null, null);
-
-    private final T head;
-    private final List<T> tail;
-
-    public static<T> List<T> empty() {
-        return EMPTY;
-    }
+    public T head;
+    public List<T> tail;
 
     public static<T> List<T> cons(T head, List<T> tail) {
         return new List(head, tail);
     }
 
     public static<T> List<T> list(T... arr) {
-        List<T> root = EMPTY;
+        List<T> root = null;
         for (int i=arr.length-1; i>=0; i--) {
             root = cons(arr[i], root);
         }
         return root;
+    }
+
+    public static<T> List<T> listIter(Iterable<T> it) {
+        List<T> newList = cons(null, null);
+        List<T> head = newList;
+
+        for (T elem: it) {
+            newList.tail = cons(elem, null);
+            newList = newList.tail;
+        }
+
+        return head.tail;
     }
 
     private List(T head, List<T> tail) {
@@ -31,30 +41,19 @@ public class List<T> implements  Iterable<T> {
         this.tail = tail;
     }
 
-    public T head() {
-        return head;
-    }
-
-    public List<T> tail() {
-        return tail;
-    }
-
-    public boolean isEmpty() {
-        return this == EMPTY;
-    }
-
     @Override
     public String toString() {
-        if (this == EMPTY) {
-            return "[]";
-        } else {
-            return String.format("%s:%s", head, tail);
-        }
+        return String.format("%s:%s", head, tail);
     }
 
     @Override
-    public boolean equals(Object other) {
-        return Lists.isSame(this, (List<T>) other);
+    public boolean equals(Object that) {
+       return Prelude.equals(this, (List<T>) that);
+    }
+
+    @Override
+    public int hashCode() {
+        throw new RuntimeException("not yet implemented");
     }
 
     @Override
@@ -64,16 +63,16 @@ public class List<T> implements  Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return !cur.isEmpty();
+                return cur != null;
             }
 
             @Override
             public T next() {
                 if (!hasNext()) {
-                    throw new NoSuchElementException("list is empty");
+                    throw new NoSuchElementException("empty list");
                 }
-                T res = cur.head();
-                cur = cur.tail();
+                T res = cur.head;
+                cur = cur.tail;
                 return res;
             }
         };

@@ -1,7 +1,7 @@
-package take2;
+package fp;
 
-import static take2.List.cons;
-import static take2.List.list;
+import static fp.List.cons;
+import static fp.List.list;
 
 /**
  * Created by sandro on 1/12/15.

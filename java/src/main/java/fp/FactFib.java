@@ -1,4 +1,4 @@
-package take2;
+package fp;
 
 import java.util.function.Consumer;
 

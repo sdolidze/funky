@@ -1,23 +1,24 @@
-package take2;
+package alternative;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- * I'm deliberately breaking encapsulation, not using final properties and using null as empty list.
- * Do so makes code smaller.
- * @param <T>
- */
-public class List<T> implements  Iterable<T> {
-    public T head;
-    public List<T> tail;
+public class List<T> implements Iterable<T> {
+    private static final List EMPTY = cons(null, null);
+
+    private final T head;
+    private final List<T> tail;
+
+    public static<T> List<T> empty() {
+        return EMPTY;
+    }
 
     public static<T> List<T> cons(T head, List<T> tail) {
         return new List(head, tail);
     }
 
     public static<T> List<T> list(T... arr) {
-        List<T> root = null;
+        List<T> root = EMPTY;
         for (int i=arr.length-1; i>=0; i--) {
             root = cons(arr[i], root);
         }
@@ -29,15 +30,36 @@ public class List<T> implements  Iterable<T> {
         this.tail = tail;
     }
 
+    public T head() {
+        return head;
+    }
+
+    public List<T> tail() {
+        return tail;
+    }
+
+    public boolean isEmpty() {
+        return this == EMPTY;
+    }
+
     @Override
     public String toString() {
-        return String.format("%s:%s", head, tail);
+        if (this == EMPTY) {
+            return "[]";
+        } else {
+            return String.format("%s:%s", head, tail);
+        }
     }
 
     @Override
     public boolean equals(Object other) {
         List<T> that = (List<T>) other;
-        return this.head.equals(that.head) && this.tail.equals(that.tail);
+        return head.equals(that.head) && tail.equals(that.tail);
+    }
+
+    @Override
+    public int hashCode() {
+        throw new RuntimeException("not yet implemented");
     }
 
     @Override
@@ -47,16 +69,16 @@ public class List<T> implements  Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return cur != null;
+                return !cur.isEmpty();
             }
 
             @Override
             public T next() {
                 if (!hasNext()) {
-                    throw new NoSuchElementException("empty list");
+                    throw new NoSuchElementException("list is empty");
                 }
-                T res = cur.head;
-                cur = cur.tail;
+                T res = cur.head();
+                cur = cur.tail();
                 return res;
             }
         };

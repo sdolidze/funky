@@ -1,28 +1,13 @@
-package fp;
+package iterable;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 /**
  * @author Sandro Dolidze <sdolidze3@gmail.com>
  */
 public class Fibonacci implements Iterable<Integer> {
-
-    public static <T> Iterator<T> takeWhile(Iterable<T> iterable, Predicate<T> predicate) {
-        return new Iterator<T>() {
-            private T buffer = null;
-            private boolean predicateFailed = false;
-
-            public boolean hasNext() {
-                return true;
-            }
-
-            public T next() {
-                return iterable.iterator().next();
-            }
-        };
-    }
-
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {

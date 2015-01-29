@@ -1,10 +1,7 @@
-package take2;
+package fp;
 
 import java.util.function.BiFunction;
 
-/**
- * Created by sandro on 1/10/15.
- */
 public class Folding {
     private static int sumRight(List<Integer> xs) {
         return xs == null ? 0 : xs.head + sumRight(xs.tail);

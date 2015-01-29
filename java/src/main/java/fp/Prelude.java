@@ -1,4 +1,4 @@
-package take2;
+package fp;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
@@ -6,8 +6,9 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static take2.List.list;
-import static take2.List.cons;
+import static fp.List.list;
+import static fp.List.cons;
+import static fp.Pair.pair;
 
 /**
  * This class is used as a namespace for standard functions. Name inspired by Haskell.
@@ -163,12 +164,20 @@ public class Prelude {
         return a -> f.apply(g.apply(a));
     }
 
+    public static<A,B,C> Function<A, Function<B,C>> curry(BiFunction<A,B,C> f) {
+        return a -> b -> f.apply(a, b);
+    }
+
+    public static<A,B,C> BiFunction<A,B,C> uncurry(Function<A, Function<B,C>> f) {
+        return (a, b) -> f.apply(a).apply(b);
+    }
+
     public static Integer sum(List<Integer> xs) {
-        return foldLeft((x,y) -> x+y, 0, xs);
+        return foldLeft((x, y) -> x + y, 0, xs);
     }
 
     public static Integer product(List<Integer> xs) {
-        return foldLeft((x,y) -> x*y, 1, xs);
+        return foldLeft((x, y) -> x * y, 1, xs);
     }
 
 
@@ -190,4 +199,71 @@ public class Prelude {
         }
     }
 
+    public static<T> boolean equals(List<T> xs, List<T> ys) {
+        if (xs == null && ys == null) {
+            return true;
+        } else if (xs == null || ys == null) {
+            return false;
+        } else {
+            return xs.head.equals(ys.head) && equals(xs.tail, ys.tail);
+        }
+    }
+
+    public static<T> int length(List<T> xs) {
+        return foldLeft((acc,x) -> acc+1, 0, xs);
+    }
+
+    public static<T> List<T> unfold(Predicate<T> stop, Function<T,T> h, Function<T,T> t, T seed) {
+        // int2binLittleEndian = unfold (==0) (`mod`2) (`div`2)
+        if (stop.test(seed)) {
+            return null;
+        } else {
+            return cons(h.apply(seed), unfold(stop, h, t, t.apply(seed)));
+        }
+    }
+
+    public static<T> List<List<T>> partition(int n, List<T> ys) {
+        return unfold(xs -> xs == null, xs -> take(n, xs), xs -> drop(n, xs), ys);
+    }
+
+    public static<T> List<Pair<T,T>> zip(List<T> xs, List<T> ys) {
+        if (xs == null || ys == null) {
+            return null;
+        } else {
+            return cons(pair(xs.head, ys.head), zip(xs.tail, ys.tail));
+        }
+    }
+
+    public static<T> List<Pair<T,T>> pairs(List<T> xs) {
+        return zip(xs, xs.tail);
+    }
+
+    public static<T> boolean all(Predicate<T> p, List<T> xs) {
+        return foldLeft((x, y) -> x && y, true, map(p::test, xs));
+    }
+
+    public static<T extends Comparable<T>> boolean isSorted(List<T> xs) {
+        return all(x -> lt(x.left, x.right), pairs(xs));
+    }
+
+    private static<T extends Comparable<T>> boolean lt(T left, T right) {
+        return left.compareTo(right) < 0;
+    }
+
+    private static<T extends Comparable<T>> boolean gte(T left, T right) {
+        return left.compareTo(right) >= 0;
+    }
+
+    public static<T> Pair<List<T>, List<T>> partitionBy(Predicate<T> p, List<T> xs) {
+        if (xs == null) {
+            return pair(null, null);
+        } else {
+            Pair<List<T>, List<T>> prev = partitionBy(p, xs.tail);
+            if (p.test(xs.head)) {
+                return pair(cons(xs.head, prev.left), prev.right);
+            } else {
+                return pair(prev.left, cons(xs.head, prev.right));
+            }
+        }
+    }
 }

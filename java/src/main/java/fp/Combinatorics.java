@@ -1,8 +1,8 @@
-package take2;
+package fp;
 
-import static take2.List.cons;
-import static take2.List.list;
-import static take2.Pair.pair;
+import static fp.List.cons;
+import static fp.List.list;
+import static fp.Pair.pair;
 
 /**
  * Created by sandro on 1/10/15.
