@@ -11,6 +11,9 @@ import static fp.List.cons;
 import static fp.Pair.pair;
 
 /**
+ * todo: major problem found: if empty list is null, foreach block will throw NullPointerException
+ *       fixes: 1) don't use foreach use while (xs != null) { ... xs = xs->tail }
+ *              2) don't use null as empty list and avoid nulls all together
  * This class is used as a namespace for standard functions. Name inspired by Haskell.
  */
 public class Prelude {
@@ -242,6 +245,10 @@ public class Prelude {
         return foldLeft((x, y) -> x && y, true, map(p::test, xs));
     }
 
+    public static<T> boolean any(Predicate<T> p, List<T> xs) {
+        return foldLeft((x, y) -> x || y, false, map(p::test, xs));
+    }
+
     public static<T extends Comparable<T>> boolean isSorted(List<T> xs) {
         return all(x -> lt(x.left, x.right), pairs(xs));
     }
@@ -265,5 +272,25 @@ public class Prelude {
                 return pair(prev.left, cons(xs.head, prev.right));
             }
         }
+    }
+
+    /**
+     * push every element from xs into front of ys
+     * for example push([2,1], [3,4]) = [1,2,3,4]
+     */
+    public static<T> List<T> push(List<T> xs, List<T> ys) {
+        while (xs != null) {
+            ys = cons(xs.head, ys);
+            xs = xs.tail;
+        }
+        return ys;
+
+        // tail recursion
+//        if (xs == null) {
+//            return ys;
+//        } else {
+//            return push(xs.tail, cons(xs.head, ys));
+//        }
+
     }
 }

@@ -25,8 +25,9 @@ public class CopyReverse {
 
     public static<T> List<T> reverseIter(List<T> oldList) {
         List<T> newList = null;
-        for (T x: oldList) {
-            newList = cons(x, newList);
+        while (oldList != null) {
+            newList = cons(oldList.head, newList);
+            oldList = oldList.tail;
         }
         return newList;
     }

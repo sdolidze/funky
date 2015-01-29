@@ -2,6 +2,7 @@ package fp;
 
 import static fp.List.cons;
 import static fp.List.list;
+import static fp.Prelude.length;
 
 /**
  * Created by sandro on 1/12/15.
@@ -71,7 +72,8 @@ public class Append {
     }
 
     public static<T> List<T> reverseNth(int n, List<T> xs) {
-        return null;
+        // does this work?
+        return nth(length(xs) - 1 - n, xs);
     }
 
     public static<T> void init3(List<T> xs) {
