@@ -45,7 +45,7 @@ public class Prelude {
     }
 
     public static<A,B> B foldRight(BiFunction<A, B, B> f, B v, List<A> xs) {
-       return Folding.foldRightIter(f, v, xs);
+       return Folding.foldRightRec(f, v, xs);
     }
 
     public static<A,B> B foldLeft(BiFunction<B, A, B> f, B v, List<A> xs) {
@@ -61,7 +61,13 @@ public class Prelude {
     }
 
     public static<A,B> List<B> map(Function<A, B> f, List<A> xs) {
-        return foldRight((x, ys) -> cons(f.apply(x), ys), null, xs);
+        if (xs == null) {
+            return null;
+        } else {
+            return cons(f.apply(xs.head), map(f, xs.tail));
+        }
+
+//        return foldRight((x, ys) -> cons(f.apply(x), ys), null, xs);
     }
 
     public static<A> List<A> filter(Predicate<A> p, List<A> xs) {

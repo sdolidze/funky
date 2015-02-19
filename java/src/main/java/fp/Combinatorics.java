@@ -1,5 +1,7 @@
 package fp;
 
+import java.util.function.Predicate;
+
 import static fp.List.cons;
 import static fp.List.list;
 import static fp.Pair.pair;
@@ -55,10 +57,27 @@ public class Combinatorics {
         if (k == 0 || n == k) {
             return acc;
         }
-        return binomialTailRec(acc * (n/k),n-1, k-1);
+        return binomialTailRec(acc * (n/k), n-1, k-1);
+    }
+
+    private static<T> List<List<T>> subsets(int k, List<T> xs) {
+        if (k == 0) {
+            return list(list());
+        }
+
+        if (xs == null) {
+            return list();
+        }
+
+        List<List<T>> xss = subsets(k - 1, xs.tail);
+        List<List<T>> yss = Prelude.map(ys -> cons(xs.head, ys), xss);
+        List<List<T>> zss = subsets(k, xs.tail);
+
+        return Prelude.extend(yss, zss);
     }
 
     public static void main(String[] args) {
-        System.out.println(cartesianProduct(list('a', 'b', 'c'), list(1,2,3)));
+        System.out.println(subsets(2, list(1,2,3)));
+//        System.out.println(cartesianProduct(list('a', 'b', 'c'), list(1,2,3)));
     }
 }
