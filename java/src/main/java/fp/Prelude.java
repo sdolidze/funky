@@ -1,20 +1,21 @@
 package fp;
 
-import java.util.Iterator;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static fp.List.list;
 import static fp.List.cons;
+import static fp.List.list;
 import static fp.Pair.pair;
 
 /**
- * todo: major problem found: if empty list is null, foreach block will throw NullPointerException
- *       fixes: 1) don't use foreach use while (xs != null) { ... xs = xs->tail }
- *              2) don't use null as empty list and avoid nulls all together
- * This class is used as a namespace for standard functions. Name inspired by Haskell.
+ * todo: every function needs a unit test ;)
+ * todo: remove extra things
+ * This class is used as a namespace for standard functions.
+ * Name inspired by Haskell.
  */
 public class Prelude {
 
@@ -30,26 +31,20 @@ public class Prelude {
         return CopyReverse.reverseIter(xs);
     }
 
-    public static<A> Iterator<A> replicate(A a) {
-        return new Iterator<A>() {
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public A next() {
-                return a;
-            }
-        };
-    }
-
     public static<A,B> B foldRight(BiFunction<A, B, B> f, B v, List<A> xs) {
-       return Folding.foldRightRec(f, v, xs);
+       return Folding.foldRightIter(f, v, xs);
     }
 
     public static<A,B> B foldLeft(BiFunction<B, A, B> f, B v, List<A> xs) {
         return Folding.foldLeftIter(f, v, xs);
+    }
+
+    public static<A,B> List<B> scanRight(BiFunction<B, A, B> f, B v, List<A> xs) {
+        throw new NotImplementedException();
+    }
+
+    public static<A,B> List<B> scanLeft(BiFunction<B, A, B> f, B v, List<A> xs) {
+        throw new NotImplementedException();
     }
 
     public static<A> A foldLeft1(BinaryOperator<A> f, List<A> xs) {
@@ -61,6 +56,7 @@ public class Prelude {
     }
 
     public static<A,B> List<B> map(Function<A, B> f, List<A> xs) {
+        // todo: also implement this iteratively
         if (xs == null) {
             return null;
         } else {
@@ -103,6 +99,9 @@ public class Prelude {
     }
 
     public static<A> boolean containsList(List<A> xs, List<A> ys) {
+        // todo: this is probably wrong: test containsList([1,2], [1,1,2])
+        // thanks for the idea to @safareli
+        // damn, I really don't know how to use English prepositions :)
         if (xs == null) {
             return true;
         } else if (ys == null) {
@@ -113,6 +112,7 @@ public class Prelude {
     }
 
     public static<A> boolean isPrefix(List<A> xs, List<A> ys) {
+        // hmm, is this write? write unit tests to be sure
         if (xs == null) {
             return true;
         } else if (ys == null) {
@@ -124,15 +124,6 @@ public class Prelude {
 
     public static<A,B> List<B> flatMap(Function<A,List<B>> f, List<A> xs) {
         return flatten(map(f, xs));
-    }
-
-    public static<A> List<List<A>> powerSet(List<A> xs) {
-        if (xs == null) {
-            return null;
-        } else {
-            List<List<A>> prev = powerSet(xs.tail);
-            return extend(prev, map(y -> cons(xs.head, y), prev));
-        }
     }
 
     public static<A> List<A> take(int n, List<A> xs) {
@@ -181,23 +172,6 @@ public class Prelude {
         return (a, b) -> f.apply(a).apply(b);
     }
 
-    public static Integer sum(List<Integer> xs) {
-        return foldLeft((x, y) -> x + y, 0, xs);
-    }
-
-    public static Integer product(List<Integer> xs) {
-        return foldLeft((x, y) -> x * y, 1, xs);
-    }
-
-
-    public static<A> List<A> unique(List<A> xs) {
-        if (xs == null) {
-            return null;
-        } else {
-            return contains(xs.head, xs.tail) ? unique(xs.tail) : cons(xs.head, unique(xs.tail));
-        }
-    }
-
     public static List<Integer> sort(List<Integer> xs) {
         if (xs == null) {
             return null;
@@ -243,6 +217,10 @@ public class Prelude {
         }
     }
 
+    public static<A,B,C> List<C> zipWith(BiFunction<A,B,C> f, List<A> as, List<B> bs) {
+        throw new RuntimeException("not yet implemented");
+    }
+
     public static<T> List<Pair<T,T>> pairs(List<T> xs) {
         return zip(xs, xs.tail);
     }
@@ -281,6 +259,7 @@ public class Prelude {
     }
 
     /**
+     * todo: this is very vague function, it should not be here, remove it later
      * push every element from xs into front of ys
      * for example push([2,1], [3,4]) = [1,2,3,4]
      */
