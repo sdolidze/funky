@@ -14,8 +14,9 @@ public class Append {
 
     public static<T> List<T> reverse(List<T> oldList) {
         List<T> newList = null;
-        for (T x: oldList) {
-            newList = cons(x, newList);
+        while (oldList != null) {
+            newList = cons(oldList.head, newList);
+            oldList = oldList.tail;
         }
         return newList;
     }
@@ -64,7 +65,19 @@ public class Append {
     }
 
     public static<T> List<T> secondLastIter(List<T> xs) {
-        return null;
+        // hmm, careful
+        assert xs.tail != null; // length(xs) >= 1
+        List<T> prevPrev = xs;
+        List<T> prev = xs.tail;
+        List<T> cur = xs.tail.tail;
+
+        while (cur != null) {
+            prevPrev = prev;
+            prev = cur;
+            cur = cur.tail;
+        }
+
+        return prevPrev;
     }
 
     public static<T> List<T> nth(int n, List<T> xs) {

@@ -1,7 +1,5 @@
 package fp;
 
-import java.util.function.Predicate;
-
 import static fp.List.cons;
 import static fp.List.list;
 import static fp.Pair.pair;
@@ -10,8 +8,13 @@ import static fp.Pair.pair;
  * Created by sandro on 1/10/15.
  */
 public class Combinatorics {
-    public static<T> List<List<T>> powerSet(List<T> xs) {
-        return null;
+    public static<A> List<List<A>> powerSet(List<A> xs) {
+        if (xs == null) {
+            return null;
+        } else {
+            List<List<A>> prev = powerSet(xs.tail);
+            return Prelude.extend(prev, Prelude.map(y -> cons(xs.head, y), prev));
+        }
     }
 
     public static<T> List<List<T>> permutations(List<T> xs) {

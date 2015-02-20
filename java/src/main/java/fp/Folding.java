@@ -11,12 +11,9 @@ public class Folding {
         return xs == null ? v : f.apply(xs.head, foldRightRec(f, v, xs.tail));
     }
 
-    public static<A,B> B foldRightIter(BiFunction<A, B ,B> f, B v, List<A> xs) {
-        B acc = v;
-        for (A x: Prelude.reverse(xs)) {
-            acc = f.apply(x, acc);
-        }
-        return acc;
+    public static<A,B> B foldRightIter(BiFunction<A, B, B> f, B v, List<A> xs) {
+        // todo: there must be a way, other than reversal
+        return foldLeftIter(Prelude.flip(f), v, Prelude.reverse(xs));
     }
 
     private static int sumFoldRight(List<Integer> xs) {
@@ -33,8 +30,9 @@ public class Folding {
 
     public static<A,B> B foldLeftIter(BiFunction<B,A,B> f, B v, List<A> xs) {
         B acc = v;
-        for (A x: xs) {
-            acc = f.apply(acc, x);
+        while (xs != null) {
+            acc = f.apply(acc, xs.head);
+            xs = xs.tail;
         }
         return acc;
     }

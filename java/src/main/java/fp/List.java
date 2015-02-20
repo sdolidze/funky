@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
+ * todo: null represents empty list, so remove iterable
  * I'm deliberately breaking encapsulation, not using final properties and using null as empty list.
  * Doing so makes code smaller.
  * @param <T>

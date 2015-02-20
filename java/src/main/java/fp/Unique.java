@@ -3,7 +3,7 @@ package fp;
 import static fp.List.cons;
 
 /**
- * Created by sandro on 1/25/15.
+ * todo: implement using quick sort, it is probably the best solution
  */
 public class Unique {
     public static<T> boolean contains(T x, List<T> xs) {
