@@ -20,6 +20,26 @@ public class Merge {
     }
 
     /**
+     * push every element from xs into front of ys
+     * for example push([2,1], [3,4]) = [1,2,3,4]
+     */
+    private static<T> List<T> push(List<T> xs, List<T> ys) {
+        while (xs != null) {
+            ys = cons(xs.head, ys);
+            xs = xs.tail;
+        }
+        return ys;
+
+        // tail recursion
+//        if (xs == null) {
+//            return ys;
+//        } else {
+//            return push(xs.tail, cons(xs.head, ys));
+//        }
+
+    }
+
+    /**
      * result will be in reverse order
      */
     public static<T extends Comparable<T>> List<T> mergeTailRec(List<T> acc, List<T> xs, List<T> ys) {

@@ -34,7 +34,25 @@ public class Sorting {
         return merge(msort(pair.left), msort(pair.right));
     }
 
-    private static <T extends Comparable<T>> boolean lt(T left, T right) {
+    public static<T> List<Pair<T,T>> pairs(List<T> xs) {
+        return zip(xs, xs.tail);
+    }
+
+    public static<T extends Comparable<T>> boolean isSorted(List<T> xs) {
+        // todo: write this iteratively
+        return all(x -> lt(x.left, x.right), pairs(xs));
+    }
+
+    private static<T extends Comparable<T>> boolean lt(T left, T right) {
         return left.compareTo(right) < 0;
     }
+
+    private static<T extends Comparable<T>> boolean gt(T left, T right) {
+        return left.compareTo(right) > 0;
+    }
+
+    private static<T extends Comparable<T>> boolean gte(T left, T right) {
+        return left.compareTo(right) >= 0;
+    }
+
 }

@@ -13,12 +13,10 @@ import static fp.Pair.pair;
 
 /**
  * todo: every function needs a unit test ;)
- * todo: remove extra things
  * This class is used as a namespace for standard functions.
  * Name inspired by Haskell.
  */
 public class Prelude {
-
     public static<T> T head(List<T> xs) {
         return xs.head;
     }
@@ -96,30 +94,6 @@ public class Prelude {
 
     public static<A> List<A> flatten(List<List<A>> xss) {
         return foldRight(Prelude::extend, null, xss);
-    }
-
-    public static<A> boolean containsList(List<A> xs, List<A> ys) {
-        // todo: this is probably wrong: test containsList([1,2], [1,1,2])
-        // thanks for the idea to @safareli
-        // damn, I really don't know how to use English prepositions :)
-        if (xs == null) {
-            return true;
-        } else if (ys == null) {
-            return false;
-        } else {
-            return xs.head.equals(ys.head) ? containsList(xs.tail, ys.tail) : containsList(xs, ys.tail);
-        }
-    }
-
-    public static<A> boolean isPrefix(List<A> xs, List<A> ys) {
-        // hmm, is this write? write unit tests to be sure
-        if (xs == null) {
-            return true;
-        } else if (ys == null) {
-            return false;
-        } else {
-            return xs.head.equals(ys.head) && isPrefix(xs.tail, ys.tail);
-        }
     }
 
     public static<A,B> List<B> flatMap(Function<A,List<B>> f, List<A> xs) {
@@ -221,28 +195,12 @@ public class Prelude {
         throw new RuntimeException("not yet implemented");
     }
 
-    public static<T> List<Pair<T,T>> pairs(List<T> xs) {
-        return zip(xs, xs.tail);
-    }
-
     public static<T> boolean all(Predicate<T> p, List<T> xs) {
         return foldLeft((x, y) -> x && y, true, map(p::test, xs));
     }
 
     public static<T> boolean any(Predicate<T> p, List<T> xs) {
         return foldLeft((x, y) -> x || y, false, map(p::test, xs));
-    }
-
-    public static<T extends Comparable<T>> boolean isSorted(List<T> xs) {
-        return all(x -> lt(x.left, x.right), pairs(xs));
-    }
-
-    private static<T extends Comparable<T>> boolean lt(T left, T right) {
-        return left.compareTo(right) < 0;
-    }
-
-    private static<T extends Comparable<T>> boolean gte(T left, T right) {
-        return left.compareTo(right) >= 0;
     }
 
     public static<T> Pair<List<T>, List<T>> partitionBy(Predicate<T> p, List<T> xs) {
@@ -256,26 +214,5 @@ public class Prelude {
                 return pair(prev.left, cons(xs.head, prev.right));
             }
         }
-    }
-
-    /**
-     * todo: this is very vague function, it should not be here, remove it later
-     * push every element from xs into front of ys
-     * for example push([2,1], [3,4]) = [1,2,3,4]
-     */
-    public static<T> List<T> push(List<T> xs, List<T> ys) {
-        while (xs != null) {
-            ys = cons(xs.head, ys);
-            xs = xs.tail;
-        }
-        return ys;
-
-        // tail recursion
-//        if (xs == null) {
-//            return ys;
-//        } else {
-//            return push(xs.tail, cons(xs.head, ys));
-//        }
-
     }
 }

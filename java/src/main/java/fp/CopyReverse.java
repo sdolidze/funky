@@ -24,6 +24,7 @@ public class CopyReverse {
     }
 
     public static<T> List<T> reverseIter(List<T> oldList) {
+//        return Prelude.foldLeft((xs, x) -> cons(x, xs), null, oldList);
         List<T> newList = null;
         while (oldList != null) {
             newList = cons(oldList.head, newList);
