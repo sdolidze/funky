@@ -48,6 +48,13 @@ public class Folding {
     }
 
     public static<A,B> List<A> scanLeftIter(BiFunction<A, B, A> f, A v, List<B> xs) {
-        throw new NotImplementedException();
+        List<A> head = list(v);
+        List<A> last = head;
+        while (xs != null) {
+            last.tail = cons(f.apply(last.head, xs.head), null);
+            last = last.tail;
+            xs = xs.tail;
+        }
+        return head;
     }
 }

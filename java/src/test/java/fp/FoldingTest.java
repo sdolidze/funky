@@ -17,8 +17,8 @@ public class FoldingTest extends TestCase {
     }
 
     public void testScanLeftRec() {
-        Function<List<Integer>, List<Integer>> sum = xs -> scanLeftRec(Integers::add, 0, xs);
-        Function<List<Integer>, List<Integer>> subtract = xs -> scanLeftRec(Integers::subtract, 0, xs);
+        Function<List<Integer>, List<Integer>> sum = xs -> scanLeftIter(Integers::add, 0, xs);
+        Function<List<Integer>, List<Integer>> subtract = xs -> scanLeftIter(Integers::subtract, 0, xs);
         assertEquals(list(0,1,3,6), sum.apply(list(1,2,3)));
         assertEquals(list(0), sum.apply(null));
         assertEquals(list(0,-1,-3,-6), subtract.apply(list(1,2,3)));
