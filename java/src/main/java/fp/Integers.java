@@ -4,6 +4,14 @@ package fp;
  * Created by sandro on 2/20/15.
  */
 public class Integers {
+    public static Integer add(Integer x, Integer y) {
+        return x + y;
+    }
+
+    public static Integer subtract(Integer x, Integer y) {
+        return x - y;
+    }
+
     /*
      * left association => sum([1,2,3]) = (((0+1)+2)+3)
      */
