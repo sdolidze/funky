@@ -4,6 +4,22 @@ package fp;
  * Created by sandro on 2/20/15.
  */
 public class Integers {
+    public static Integer min(Integer x, Integer y) {
+        if (x < y) {
+            return x;
+        } else {
+            return y;
+        }
+    }
+
+    public static Integer max(Integer x, Integer y) {
+        if (x > y) {
+            return x;
+        } else {
+            return y;
+        }
+    }
+
     public static Integer add(Integer x, Integer y) {
         return x + y;
     }

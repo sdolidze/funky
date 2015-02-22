@@ -25,6 +25,22 @@ public class Prelude {
         return xs.tail;
     }
 
+    public static<A> A last(List<A> xs) {
+        if (xs.tail == null) {
+            return xs.head;
+        } else {
+            return last(xs.tail);
+        }
+    }
+
+    public static<A> List<A> init(List<A> xs) {
+        if (xs.tail == null) {
+            return null;
+        } else {
+            return cons(xs.head, init(xs.tail));
+        }
+    }
+
     public static<T> List<T> reverse(List<T> xs) {
         return CopyReverse.reverseIter(xs);
     }
@@ -42,7 +58,7 @@ public class Prelude {
     }
 
     public static<A,B> List<B> scanLeft(BiFunction<B, A, B> f, B v, List<A> xs) {
-        throw new NotImplementedException();
+        return Folding.scanLeftIter(f, v, xs);
     }
 
     public static<A> A foldLeft1(BinaryOperator<A> f, List<A> xs) {
@@ -50,7 +66,16 @@ public class Prelude {
     }
 
     public static<A> A foldRight1(BinaryOperator<A> f, List<A> xs) {
-        return foldRight(f, xs.head, xs.tail);
+        /* can be implemented smarter way:
+         * in Haskell Prelude:
+         * ---
+         * foldr1           :: (a -> a -> a) -> [a] -> a
+         * foldr1 f [x]     =  x
+         * foldr1 f (x:xs)  =  f x (foldr1 f xs)
+         * foldr1 _ []      =  error "Prelude.foldr1: empty list"
+         */
+
+        return foldRight(f, last(xs), init(xs));
     }
 
     public static<A,B> List<B> map(Function<A, B> f, List<A> xs) {
