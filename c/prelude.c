@@ -4,20 +4,25 @@
 #include <assert.h>
 #include <strings.h>
 
-#define deref(x) (*((elem_t *) x))
+#define deref(ref, type) (*((type *) ref))
+#define ref(value, type) ({ type *res = malloc(sizeof(type)); *res = value; res; })
 
-// what if I need auxiliary parameters? exta `void *` for data?
+#define refInt(num) (  ref(num, int))
+#define derefInt(num) (deref(num, int))
+
+// what if I need to inline data? use char[] and macros for size?
+// what is I want different sizes in different projects
+// use bool for predicat?
 typedef void *(*function)(void *);
 typedef void *(*bifunction)(void *, void *);
 typedef int (*predicate)(void *);
-typedef int elem_t;
 
 typedef struct list_t {
-    elem_t *head;
+    void *head;
     struct list_t *tail;
 } list_t;
 
-list_t *cons(elem_t *head, list_t *tail) {
+list_t *cons(void *head, list_t *tail) {
     list_t *xs = malloc(sizeof(list_t));
     xs->head = head;
     xs->tail = tail;
@@ -40,12 +45,8 @@ list_t *reverse(list_t *oldList) {
     return newList;
 }
 
-elem_t *ref(elem_t elem) {
-    elem_t *res = malloc(sizeof(int));
-    *res = elem;
-    return res;
-}
-
+// can I make this method generic? how can I give type argument?
+// maybe use macro?
 list_t *list(int count, ...) {
     va_list ap;
 
@@ -53,8 +54,8 @@ list_t *list(int count, ...) {
 
     list_t *xs = NULL;
     for (int i=0; i<count; i++) {
-        elem_t x = va_arg(ap, elem_t);
-        xs = cons(ref(x), xs);
+        int x = va_arg(ap, int);
+        xs = cons(ref(x, int), xs);
     }
 
     va_end(ap);
@@ -73,7 +74,7 @@ int length(list_t *xs) {
 void print(list_t *xs) {
     // it prints exta ` ` in the end
     for (; xs != NULL; xs=xs->tail) {
-        printf("%d ", *xs->head);
+        printf("%d ", deref(xs->head, int));
     }
     printf("\n");
 }
@@ -91,7 +92,7 @@ list_t *copy(list_t *oldList) {
     return sentinel.tail;
 }
 
-elem_t *head(list_t *xs) {
+void *head(list_t *xs) {
     assert(xs != NULL);
     return xs->head;
 }
@@ -101,7 +102,7 @@ list_t *tail(list_t *xs) {
     return xs->tail;
 }
 
-elem_t *last(list_t *xs) {
+void *last(list_t *xs) {
     assert(xs != NULL);
     return (xs->tail == NULL) ? xs->head : last(xs->tail);
 }
@@ -159,16 +160,16 @@ void *reduce(bifunction f, void *v, list_t *xs) {
 }
 
 void *inc(void *x) {
-    return ref(deref(x) + 1);
+    return refInt(derefInt(x) + 1);
 }
 
 void *plus(void *x, void *y) {
-    return ref(deref(x) + deref(y));
+    return refInt(derefInt(x) + derefInt(y));
 }
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    void *res = reduce(plus, ref(0), xs);
-    printf("%d\n", deref(res));
+    void *res = reduce(plus, ref(0, int), xs);
+    printf("%d\n", deref(res, int));
     return 0;
 }
