@@ -71,5 +71,6 @@ void print(list_t *xs) {
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
+    print(xs);
     return 0;
 }
