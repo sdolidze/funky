@@ -4,8 +4,14 @@
 #include <assert.h>
 #include <strings.h>
 
+// I should think of unit testing strategy
+
 #define deref(ref, type) (*((type *) ref))
+// beware that this is a compiler extension, so it's not very portable
+// but then again, I don't really care :)
 #define ref(value, type) ({ type *res = malloc(sizeof(type)); *res = value; res; })
+// how can do this in multiple lines?
+
 
 #define refInt(num) (  ref(num, int))
 #define derefInt(num) (deref(num, int))
