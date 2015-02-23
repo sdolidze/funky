@@ -53,6 +53,14 @@ list_t *list(int count, ...) {
     return reverse(xs);
 }
 
+int length(list_t *xs) {
+    int len = 0;
+    for (; xs!=NULL; xs=xs->tail) {
+        len++;
+    }
+    return len;
+}
+
 int main() {
     list_t *xs = list(3, 1, 2, 3);
     return 0;
