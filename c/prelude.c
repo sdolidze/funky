@@ -61,6 +61,14 @@ int length(list_t *xs) {
     return len;
 }
 
+void print(list_t *xs) {
+    // it prints exta ` ` in the end
+    for (; xs != NULL; xs=xs->tail) {
+        printf("%d ", xs->head);
+    }
+    printf("\n");
+}
+
 int main() {
     list_t *xs = list(3, 1, 2, 3);
     return 0;
