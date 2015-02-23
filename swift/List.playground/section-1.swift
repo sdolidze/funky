@@ -46,22 +46,20 @@ func list<A>(xs: A...) -> List<A> {
     return cur
 }
 
-func head<A>(list: List<A>) -> A? {
+func head<A>(list: List<A>) -> A {
     // can I do this in a more elegant way?
     // maybe use switch case?
     if let xs = list as? Cons {
         return xs.head
     } else {
-        return nil
-        // what if I don't want to return optional, but crash? how can avoid compiler error?
-        //NSException(name: "SomeName", reason: "SomeReason", userInfo: nil).raise()
+        fatalError("emty list")
     }
 }
 
-func tail<A>(list: List<A>) -> List<A>? {
+func tail<A>(list: List<A>) -> List<A> {
     if let xs = list as? Cons {
         return xs.tail
     } else {
-        return nil
+        fatalError("empty list")
     }
 }
