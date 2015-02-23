@@ -10,6 +10,7 @@
 #define refInt(num) (  ref(num, int))
 #define derefInt(num) (deref(num, int))
 
+// it looks very much like Java Genrics, I'm using type erasure :D
 // what if I need to inline data? use char[] and macros for size?
 // what is I want different sizes in different projects
 // use bool for predicat?
