@@ -189,6 +189,10 @@ list_t *scan(bifunction f, void *v, list_t *xs) {
     return head;
 }
 
+list_t *scan1(bifunction f, list_t *xs) {
+    assert (xs != NULL);
+    return scan(f, xs->head, xs->tail);
+}
 
 void *inc(void *x) {
     return refInt(derefInt(x) + 1);
@@ -211,7 +215,8 @@ void *printLn(void *x) {
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    int sum = derefInt(reduce1(plus, xs));
-    printf("%d\n", sum);
+    list_t *ys = scan1(plus, xs);
+    list_t *zs = map(showInt, ys);
+    forEach(printLn, zs);
     return 0;
 }
