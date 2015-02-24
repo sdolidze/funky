@@ -4,6 +4,10 @@
 #include <assert.h>
 #include <strings.h>
 
+// I don't really care about memory managment in my code
+// I only allocate memory and never deallocate it
+// I do this just for simplicity
+
 // I should think of unit testing strategy
 
 #define deref(ref, type) (*((type *) ref))
