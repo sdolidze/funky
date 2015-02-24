@@ -4,8 +4,8 @@
 #include <assert.h>
 #include <strings.h>
 
-/* interesting approach:
- * ---------------------
+/* interesting approach for future:
+ * --------------------------------
  * each function should have arg_t input, which contains list
  * of its arguments, and also enclosing context :)
  * how can I specify constaints: my funciton takes only two arguments?
