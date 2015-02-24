@@ -172,6 +172,12 @@ void *reduce(bifunction f, void *v, list_t *xs) {
     return acc;
 }
 
+
+void *reduce1(bifunction f, list_t *xs) {
+    assert(xs != NULL);
+    return reduce(f, xs->head, xs->tail);
+}
+
 list_t *scan(bifunction f, void *v, list_t *xs) {
     list_t *head = cons(v, NULL);
     list_t *last = head;
@@ -183,6 +189,7 @@ list_t *scan(bifunction f, void *v, list_t *xs) {
     return head;
 }
 
+
 void *inc(void *x) {
     return refInt(derefInt(x) + 1);
 }
@@ -191,7 +198,7 @@ void *plus(void *x, void *y) {
     return refInt(derefInt(x) + derefInt(y));
 }
 
-void *show(void *x) {
+void *showInt(void *x) {
     void *buffer = malloc(32);
     sprintf(buffer, "%d", derefInt(x));
     return buffer;
@@ -204,7 +211,7 @@ void *printLn(void *x) {
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    list_t *ys = scan(plus, refInt(0), xs);
-    forEach(printLn, map(show, ys));
+    int sum = derefInt(reduce1(plus, xs));
+    printf("%d\n", sum);
     return 0;
 }
