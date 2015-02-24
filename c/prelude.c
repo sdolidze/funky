@@ -172,6 +172,17 @@ void *reduce(bifunction f, void *v, list_t *xs) {
     return acc;
 }
 
+list_t *scan(bifunction f, void *v, list_t *xs) {
+    list_t *head = cons(v, NULL);
+    list_t *last = head;
+    for (list_t *ys = xs; ys != NULL; ys = ys->tail) {
+        last->tail = cons(f(last->head, ys->head), NULL);
+        last = last->tail;
+        xs = xs->tail;
+    }
+    return head;
+}
+
 void *inc(void *x) {
     return refInt(derefInt(x) + 1);
 }
@@ -193,7 +204,7 @@ void *printLn(void *x) {
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    list_t *ys = map(show, xs);
-    forEach(printLn, ys);
+    list_t *ys = scan(plus, refInt(0), xs);
+    forEach(printLn, map(show, ys));
     return 0;
 }
