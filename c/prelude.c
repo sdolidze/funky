@@ -180,20 +180,20 @@ void *plus(void *x, void *y) {
     return refInt(derefInt(x) + derefInt(y));
 }
 
-void *toString(void *x) {
+void *show(void *x) {
     void *buffer = malloc(32);
     sprintf(buffer, "%d", derefInt(x));
     return buffer;
 }
 
-void *printLine(void *x) {
+void *printLn(void *x) {
     printf("%s\n", (char *)x);
     return NULL;
 }
 
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    list_t *ys = map(toString, xs);
-    forEach(printLine, ys);
+    list_t *ys = map(show, xs);
+    forEach(printLn, ys);
     return 0;
 }
