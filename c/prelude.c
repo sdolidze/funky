@@ -158,6 +158,12 @@ list_t *map(function f, list_t *xs) {
     return xs;
 }
 
+void forEach(function f, list_t *xs) {
+    for (list_t *ys = xs; ys != NULL; ys = ys->tail) {
+        f(ys->head);
+    }
+}
+
 void *reduce(bifunction f, void *v, list_t *xs) {
     void *acc = v;
     for (list_t *ys = xs; ys != NULL; ys = ys->tail) {
@@ -174,9 +180,20 @@ void *plus(void *x, void *y) {
     return refInt(derefInt(x) + derefInt(y));
 }
 
+void *toString(void *x) {
+    void *buffer = malloc(32);
+    sprintf(buffer, "%d", derefInt(x));
+    return buffer;
+}
+
+void *printLine(void *x) {
+    printf("%s\n", (char *)x);
+    return NULL;
+}
+
 int main() {
     list_t *xs = list(3, 1, 2, 3);
-    void *res = reduce(plus, ref(0, int), xs);
-    printf("%d\n", deref(res, int));
+    list_t *ys = map(toString, xs);
+    forEach(printLine, ys);
     return 0;
 }
