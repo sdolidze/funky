@@ -175,8 +175,25 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> repeat(int n, A v) {
+        return () -> new Iterator<A>() {
+            private int leftToGive = n;
+
+            @Override
+            public boolean hasNext() {
+                return leftToGive > 0;
+            }
+
+            @Override
+            public A next() {
+                leftToGive--;
+                return v;
+            }
+        };
+    }
+
     public static void main(String[] args) {
-        Iterable<Integer> xs = take(10, cycle(Arrays.asList(1,2,3)));
+        Iterable<String> xs = repeat(10, "sandro");
         xs.forEach(System.out::println);
     }
 }
