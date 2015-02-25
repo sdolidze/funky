@@ -1,5 +1,9 @@
 package fp;
 
+import static fp.List.cons;
+import static fp.List.list;
+import static fp.Prelude.*;
+
 /**
  * Created by sandro on 2/20/15.
  */
@@ -36,7 +40,7 @@ public class Integers {
     }
 
     public static Integer sum(List<Integer> xs) {
-        return Prelude.foldLeft((x, y) -> x + y, 0, xs);
+        return foldLeft((x, y) -> x + y, 0, xs);
     }
 
     /*
@@ -50,10 +54,42 @@ public class Integers {
     }
 
     private static int sumFoldRight(List<Integer> xs) {
-        return Prelude.foldRight((x, y) -> x + y, 0, xs);
+        return foldRight((x, y) -> x + y, 0, xs);
     }
 
     public static Integer product(List<Integer> xs) {
-        return Prelude.foldLeft((x, y) -> x * y, 1, xs);
+        return foldLeft((x, y) -> x * y, 1, xs);
+    }
+
+    private static List<Integer> rangeRec(Integer to, List<Integer> acc) {
+        if (to == 0) {
+            return acc;
+        } else {
+            return rangeRec(to - 1, cons(to - 1, acc));
+        }
+    }
+
+    public static List<Integer> range(Integer from, Integer to) {
+        List<Integer> xs = null;
+        for (int i = to - 1; i >= from; i --) {
+            xs = cons(i, xs);
+        }
+        return xs;
+    }
+
+    public static List<Integer> range(Integer to) {
+        return range(0, to);
+    }
+
+    public static List<Integer> factors(Integer x) {
+        return filter(y -> x % y == 0, range(1, x + 1));
+
+    }
+
+    public static boolean isPrime(Integer x) {
+        if (x < 0) {
+            throw new RuntimeException("negative number is not allowed");
+        }
+        return Prelude.equals(list(1, x), factors(x));
     }
 }
