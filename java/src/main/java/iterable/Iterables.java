@@ -140,6 +140,20 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> replicate(A v) {
+        return () -> new Iterator<A>() {
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public A next() {
+                return v;
+            }
+        };
+    }
+
     public static void main(String[] args) {
         Iterable<Integer> sums = scan(Integers::add, 0, integers());
         Iterable<Integer> pr = takeWhile(x -> x < 100, sums);
