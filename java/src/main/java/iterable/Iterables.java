@@ -4,6 +4,7 @@ import fp.Integers;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -113,8 +114,35 @@ public class Iterables {
         };
     }
 
+    public static<A, B> Iterable<A> scan(BiFunction<A, B, A> f, A v, Iterable<B> it) {
+        return () -> new Iterator<A>() {
+            private A acc = v;
+            private boolean isFirst = true;
+            private Iterator<B> xs = it.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return isFirst || xs.hasNext();
+            }
+
+            @Override
+            public A next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                if (isFirst) {
+                    isFirst = false;
+                    return acc;
+                }
+                acc = f.apply(acc, xs.next());
+                return acc;
+            }
+        };
+    }
+
     public static void main(String[] args) {
-        Iterable<Integer> pr = takeWhile(x -> x < 100, primes());
+        Iterable<Integer> sums = scan(Integers::add, 0, integers());
+        Iterable<Integer> pr = takeWhile(x -> x < 100, sums);
         pr.forEach(System.out::println);
     }
 }
