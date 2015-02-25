@@ -2,8 +2,8 @@ package iterable;
 
 import fp.Integers;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -154,9 +154,29 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> cycle(Iterable<A> it) {
+        // iterable must be finite, should fit in memory, should return fast
+        return () -> new Iterator<A>() {
+            private List<A> buffer = Util.fromIterable(it);
+            private int pos = 0;
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public A next() {
+                A cur = buffer.get(pos);
+                pos++;
+                pos %= buffer.size();
+                return cur;
+            }
+        };
+    }
+
     public static void main(String[] args) {
-        Iterable<Integer> sums = scan(Integers::add, 0, integers());
-        Iterable<Integer> pr = takeWhile(x -> x < 100, sums);
-        pr.forEach(System.out::println);
+        Iterable<Integer> xs = take(10, cycle(Arrays.asList(1,2,3)));
+        xs.forEach(System.out::println);
     }
 }
