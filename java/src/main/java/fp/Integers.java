@@ -24,6 +24,10 @@ public class Integers {
         }
     }
 
+    public static Integer inc(Integer x) {
+        return x + 1;
+    }
+
     public static Integer add(Integer x, Integer y) {
         return x + y;
     }
