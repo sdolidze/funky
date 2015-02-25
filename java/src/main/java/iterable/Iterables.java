@@ -2,8 +2,9 @@ package iterable;
 
 import fp.Integers;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -154,6 +155,23 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> repeat(int n, A v) {
+        return () -> new Iterator<A>() {
+            private int leftToGive = n;
+
+            @Override
+            public boolean hasNext() {
+                return leftToGive > 0;
+            }
+
+            @Override
+            public A next() {
+                leftToGive--;
+                return v;
+            }
+        };
+    }
+
     public static<A> Iterable<A> cycle(Iterable<A> it) {
         // iterable must be finite, should fit in memory, should return fast
         return () -> new Iterator<A>() {
@@ -171,23 +189,6 @@ public class Iterables {
                 pos++;
                 pos %= buffer.size();
                 return cur;
-            }
-        };
-    }
-
-    public static<A> Iterable<A> repeat(int n, A v) {
-        return () -> new Iterator<A>() {
-            private int leftToGive = n;
-
-            @Override
-            public boolean hasNext() {
-                return leftToGive > 0;
-            }
-
-            @Override
-            public A next() {
-                leftToGive--;
-                return v;
             }
         };
     }
