@@ -18,4 +18,9 @@ public class IterablesTest extends TestCase {
         assertEquals(list(1,2), toList(extend(list(1,2), list())));
         assertEquals(list(1,2,3,4), toList(extend(list(1,2), list(3,4))));
     }
+
+    public static void testLead() {
+        assertEquals(list(1), toList(lead(1, list())));
+        assertEquals(list(1,2), toList(lead(1, list(2))));
+    }
 }

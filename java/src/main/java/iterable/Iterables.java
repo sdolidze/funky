@@ -234,6 +234,10 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> lead(A x, Iterable<A> ys) {
+        return extend(repeat(1, x), ys);
+    }
+
     public static<T> List<T> toList(Iterable<T> it) {
         List<T> xs = new ArrayList<>();
         for (T x: it) {
