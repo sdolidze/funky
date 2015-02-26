@@ -242,6 +242,20 @@ public class Iterables {
         return extend(xs, repeat(1, x));
     }
 
+    public static<A> Iterable<A> empty() {
+        return () -> new Iterator<A>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public A next() {
+                throw new NoSuchElementException();
+            }
+        };
+    }
+
     public static<T> List<T> toList(Iterable<T> it) {
         List<T> xs = new ArrayList<>();
         for (T x: it) {

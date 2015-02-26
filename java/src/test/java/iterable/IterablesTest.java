@@ -28,4 +28,12 @@ public class IterablesTest extends TestCase {
         assertEquals(list(1), toList(follow(1, list())));
         assertEquals(list(1,2), toList(follow(2, list(1))));
     }
+
+    public static void testEmpty() {
+        assertEquals(list(), toList(empty()));
+        try {
+            empty().iterator().next();
+            fail();
+        } catch (Exception e) {/* ignored */}
+    }
 }
