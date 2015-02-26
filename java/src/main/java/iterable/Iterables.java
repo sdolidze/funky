@@ -86,6 +86,16 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> drop(int n, Iterable<A> it) {
+        Iterator<A> iterator = it.iterator();
+        for (int i = 0; i < n; i++) {
+            if (iterator.hasNext()) {
+                iterator.next();
+            }
+        }
+        return () -> iterator;
+    }
+
     public static<A> Iterable<A> takeWhile(Predicate<A> predicate, Iterable<A> iterable) {
         return () -> new Iterator<A>() {
             private PeekIterator<A> iterator = new PeekIterator<>(iterable.iterator());

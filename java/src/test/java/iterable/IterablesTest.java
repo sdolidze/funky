@@ -7,6 +7,11 @@ import static iterable.Iterables.*;
 
 
 public class IterablesTest extends TestCase {
+    public static void testDrop() {
+        assertEquals(list(3,4), toList(drop(2, list(1, 2, 3, 4))));
+        assertEquals(list(), toList(drop(2, empty())));
+    }
+
     public static void testMap() {
         assertEquals(list("1","2"), toList(map(Integers::toString, list(1, 2))));
         assertEquals(list(2,3), toList(map(Integers::inc, list(1, 2))));
