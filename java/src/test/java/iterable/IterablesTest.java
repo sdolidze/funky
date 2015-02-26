@@ -12,6 +12,12 @@ public class IterablesTest extends TestCase {
         assertEquals(list(), toList(drop(2, empty())));
     }
 
+    public static void testDropWhile() {
+        assertEquals(list(), toList(dropWhile(x -> x < 5, list(1,2))));
+        assertEquals(list(6,7), toList(dropWhile(x -> x < 5, list(6,7))));
+        assertEquals(list(5,6), toList(dropWhile(x -> x < 5, list(4,5,6))));
+    }
+
     public static void testMap() {
         assertEquals(list("1","2"), toList(map(Integers::toString, list(1, 2))));
         assertEquals(list(2,3), toList(map(Integers::inc, list(1, 2))));

@@ -123,6 +123,15 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> dropWhile(Predicate<A> predicate, Iterable<A> iterable) {
+        PeekIterator<A> iterator = new PeekIterator<>(iterable.iterator());
+        while (iterator.hasNext() && predicate.test(iterator.peek())) {
+            iterator.next();
+        }
+        return () -> iterator;
+    }
+
+
     public static<A, B> Iterable<A> scan(BiFunction<A, B, A> f, A v, Iterable<B> it) {
         return () -> new Iterator<A>() {
             private A acc = v;
