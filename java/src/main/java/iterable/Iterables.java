@@ -191,11 +191,6 @@ public class Iterables {
         };
     }
 
-    public static void main(String[] args) {
-        Iterable<String> xs = repeat(10, "sandro");
-        xs.forEach(System.out::println);
-    }
-
     public static<A,B> Iterable<B> map(Function<A,B> f, Iterable<A> xs) {
         return () -> new Iterator<B>() {
             private Iterator<A> it = xs.iterator();
@@ -215,6 +210,30 @@ public class Iterables {
         };
     }
 
+    public static<A> Iterable<A> extend(Iterable<A> xs, Iterable<A> ys) {
+        return () -> new Iterator<A>() {
+            private Iterator<A> xit = xs.iterator();
+            private Iterator<A> yit = ys.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return xit.hasNext() || yit.hasNext();
+            }
+
+            @Override
+            public A next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                if (xit.hasNext()) {
+                    return xit.next();
+                } else /* yit.hasNext() */ {
+                    return yit.next();
+                }
+            }
+        };
+    }
+
     public static<T> List<T> toList(Iterable<T> it) {
         List<T> xs = new ArrayList<>();
         for (T x: it) {
@@ -226,5 +245,10 @@ public class Iterables {
     public static<T> List<T> list(T... xs) {
         // careful: result is immutable list
         return Arrays.asList(xs);
+    }
+
+    public static void main(String[] args) {
+        Iterable<String> xs = repeat(10, "sandro");
+        xs.forEach(System.out::println);
     }
 }
