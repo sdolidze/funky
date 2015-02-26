@@ -2,9 +2,7 @@ package iterable;
 
 import fp.Integers;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -175,7 +173,7 @@ public class Iterables {
     public static<A> Iterable<A> cycle(Iterable<A> it) {
         // iterable must be finite, should fit in memory, should return fast
         return () -> new Iterator<A>() {
-            private List<A> buffer = Util.fromIterable(it);
+            private List<A> buffer = toList(it);
             private int pos = 0;
 
             @Override
@@ -196,5 +194,37 @@ public class Iterables {
     public static void main(String[] args) {
         Iterable<String> xs = repeat(10, "sandro");
         xs.forEach(System.out::println);
+    }
+
+    public static<A,B> Iterable<B> map(Function<A,B> f, Iterable<A> xs) {
+        return () -> new Iterator<B>() {
+            private Iterator<A> it = xs.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public B next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return f.apply(it.next());
+            }
+        };
+    }
+
+    public static<T> List<T> toList(Iterable<T> it) {
+        List<T> xs = new ArrayList<>();
+        for (T x: it) {
+            xs.add(x);
+        }
+        return xs;
+    }
+
+    public static<T> List<T> list(T... xs) {
+        // careful: result is immutable list
+        return Arrays.asList(xs);
     }
 }

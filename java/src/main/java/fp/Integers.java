@@ -24,6 +24,10 @@ public class Integers {
         }
     }
 
+    public static String toString(Integer x) {
+        return x.toString();
+    }
+
     public static Integer inc(Integer x) {
         return x + 1;
     }
