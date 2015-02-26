@@ -234,8 +234,12 @@ public class Iterables {
         };
     }
 
-    public static<A> Iterable<A> lead(A x, Iterable<A> ys) {
-        return extend(repeat(1, x), ys);
+    public static<A> Iterable<A> lead(A x, Iterable<A> xs) {
+        return extend(repeat(1, x), xs);
+    }
+
+    public static<A> Iterable<A> follow(A x, Iterable<A> xs) {
+        return extend(xs, repeat(1, x));
     }
 
     public static<T> List<T> toList(Iterable<T> it) {
