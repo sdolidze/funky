@@ -38,10 +38,6 @@ public class List<T> implements Iterable<T> {
         return tail;
     }
 
-    public boolean isEmpty() {
-        return this == EMPTY;
-    }
-
     @Override
     public String toString() {
         if (this == EMPTY) {
@@ -69,7 +65,7 @@ public class List<T> implements Iterable<T> {
 
             @Override
             public boolean hasNext() {
-                return !cur.isEmpty();
+                return cur != EMPTY;
             }
 
             @Override
