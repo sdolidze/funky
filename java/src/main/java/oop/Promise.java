@@ -30,4 +30,25 @@ public class Promise<A> {
     public <B> Promise<B> finally_(Function<A,Promise<B>> f) {
         return null;
     }
+
+    public static void main(String[] args) {
+        Promise
+                .resolve("sandro")
+                .then(x -> {
+                    System.out.println("this will happen asynchronously");
+                    return Promise.resolve(String.format("_(%s)_", x));
+                })
+                .then(x -> {
+                    throw new RuntimeException("things got bad");
+                })
+                .catch_(x -> {
+                    System.out.println("if error occurs, I will be called");
+                    return null;
+                })
+                .finally_(x -> {
+                    System.out.println("this is final step");
+                    return null;
+                });
+
+    }
 }
