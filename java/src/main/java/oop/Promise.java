@@ -46,7 +46,7 @@ public class Promise<A> {
                     return null;
                 })
                 .finally_(x -> {
-                    System.out.println("this is final step");
+                    System.out.println("this is will be called, no matter what happens");
                     return null;
                 });
 
