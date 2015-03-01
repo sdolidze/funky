@@ -7,7 +7,6 @@
 // I don't really care about memory managment in my code
 // I only allocate memory and never deallocate it
 // I do this just for simplicity
-
 // I should think of unit testing strategy
 
 #define deref(ref, type) (*((type *) ref))
@@ -23,7 +22,7 @@
 // it looks very much like Java Genrics, I'm using type erasure :D
 // what if I need to inline data? use char[] and macros for size?
 // what is I want different sizes in different projects
-// use bool for predicat?
+// use bool for predicate?
 typedef void *(*function)(void *);
 typedef void *(*bifunction)(void *, void *);
 typedef int (*predicate)(void *);
