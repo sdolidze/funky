@@ -15,7 +15,6 @@
 #define ref(value, type) ({ type *res = malloc(sizeof(type)); *res = value; res; })
 // how can do this in multiple lines?
 
-
 #define refInt(num) (  ref(num, int))
 #define derefInt(num) (deref(num, int))
 
