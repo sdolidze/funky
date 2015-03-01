@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <strings.h>
 
+// this code needs refactoring, I should split into multiple files
 // how the hell can I make this generic? use void* [and size]? use char[] and define size?
 // use macros?
 // define macro to easily define lists: list(1,2,3) -> 1:2:3:[]
